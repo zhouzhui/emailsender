@@ -26,7 +26,7 @@ import com.sun.mail.smtp.SMTPMessage;
 /**
  * @author dhf
  */
-public final class MailTask implements Runnable {
+public final class SendJob implements Runnable {
     private String id = this.hashCode() + "";
 
     private InternetAddress from = null;
