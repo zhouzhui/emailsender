@@ -5,10 +5,10 @@ import org.apache.commons.pool.PoolableObjectFactory;
 /**
  * @author dhf
  */
-public class ConnectionPoolFactory implements PoolableObjectFactory<Connection> {
+public class ConnectionFactory implements PoolableObjectFactory<Connection> {
     private ConnectionParams connectionParams;
 
-    public ConnectionPoolFactory(ConnectionParams params) {
+    public ConnectionFactory(ConnectionParams params) {
         this.connectionParams = params;
     }
 
