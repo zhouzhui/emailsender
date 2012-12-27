@@ -34,96 +34,108 @@ public class ConnectionParams {
         return protocol;
     }
 
-    public void setProtocol(String protocol) {
+    public ConnectionParams setProtocol(String protocol) {
         this.protocol = protocol;
+        return this;
     }
 
     public String getHost() {
         return host;
     }
 
-    public void setHost(String host) {
+    public ConnectionParams setHost(String host) {
         this.host = host;
+        return this;
     }
 
     public int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public ConnectionParams setPort(int port) {
         this.port = port;
+        return this;
     }
 
     public String getEnvelopeFrom() {
         return envelopeFrom;
     }
 
-    public void setEnvelopeFrom(String envelopeFrom) {
+    public ConnectionParams setEnvelopeFrom(String envelopeFrom) {
         this.envelopeFrom = envelopeFrom;
+        return this;
     }
 
     public String getHeloName() {
         return heloName;
     }
 
-    public void setHeloName(String heloName) {
+    public ConnectionParams setHeloName(String heloName) {
         this.heloName = heloName;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public ConnectionParams setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public boolean isNeedAuth() {
         return needAuth;
     }
 
-    public void setNeedAuth(boolean needAuth) {
+    public ConnectionParams setNeedAuth(boolean needAuth) {
         this.needAuth = needAuth;
+        return this;
     }
 
     public boolean isDebug() {
         return debug;
     }
 
-    public void setDebug(boolean debug) {
+    public ConnectionParams setDebug(boolean debug) {
         this.debug = debug;
+        return this;
     }
 
     public long getConnectTimeout() {
         return connectTimeout;
     }
 
-    public void setConnectTimeout(long connectTimeout) {
+    public ConnectionParams setConnectTimeout(long connectTimeout) {
         this.connectTimeout = connectTimeout;
+        return this;
     }
 
     public long getSocketTimeout() {
         return socketTimeout;
     }
 
-    public void setSocketTimeout(long socketTimeout) {
+    public ConnectionParams setSocketTimeout(long socketTimeout) {
         this.socketTimeout = socketTimeout;
+        return this;
     }
 
     public PrintStream getDebugOut() {
         return debugOut;
     }
 
-    public void setDebugOut(PrintStream debugOut) {
+    public ConnectionParams setDebugOut(PrintStream debugOut) {
         this.debugOut = debugOut;
+        return this;
     }
 
     public boolean isKeepAlive() {
         return keepAlive;
     }
 
-    public void setKeepAlive(boolean keepAlive) {
+    public ConnectionParams setKeepAlive(boolean keepAlive) {
         this.keepAlive = keepAlive;
+        return this;
     }
 
 }
