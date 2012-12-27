@@ -26,12 +26,12 @@ public class SendJobTest {
 
     @Before
     public void init() {
-        this.username = "";
-        this.password = "";
-        this.smtpHost = "";
+        this.username = "fakeuser@example.com";
+        this.password = "fakepassword";
+        this.smtpHost = "fakesmtp.example.com";
         this.smtpPort = 25;
-        this.heloName = "";
-        this.mailto = "";
+        this.heloName = "faker";
+        this.mailto = "fakereceiver@excample.com";
     }
 
     @Test
@@ -40,11 +40,11 @@ public class SendJobTest {
 
         Connection conn = new Connection();
         ConnectionParams params = new ConnectionParams();
-        params.setConnectTimeout(15000).setDebug(true).setDebugOut(System.out)
+        params.setConnectTimeout(1).setDebug(true).setDebugOut(System.out)
                 .setEnvelopeFrom(username).setHeloName(heloName)
                 .setHost(smtpHost).setKeepAlive(false).setNeedAuth(true)
                 .setPassword(password).setPort(smtpPort).setProtocol("smtp")
-                .setSocketTimeout(15000);
+                .setSocketTimeout(1);
         conn.setConnectionParams(params);
         job.setConnection(conn);
         job.setContentEncoding("utf-8");
@@ -54,7 +54,7 @@ public class SendJobTest {
         job.setSubject("<script>alert(\"subject\");</script>");
         job.addMailTo(new InternetAddress(mailto));
         boolean success = job.send();
-        assertTrue(success);
+        assertTrue(!success);
     }
 
 }
