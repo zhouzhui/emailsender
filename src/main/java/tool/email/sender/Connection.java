@@ -43,20 +43,21 @@ public final class Connection {
     public void connect() throws ConnectionException {
         close();
         Properties properties = new Properties();
-        properties.put("mail.smtp.host", connectionParams.getHost());
+        properties.setProperty("mail.smtp.host", connectionParams.getHost());
         try {
-            properties.put("mail.smtp.localhost",
+            properties.setProperty("mail.smtp.localhost",
                     MimeUtility.encodeWord(connectionParams.getHeloName()));
         } catch (UnsupportedEncodingException e) {
-            properties.put("mail.smtp.localhost",
+            properties.setProperty("mail.smtp.localhost",
                     connectionParams.getHeloName());
         }
-        properties.put("mail.smtp.auth", connectionParams.isNeedAuth());
-        properties.put("mail.from", connectionParams.getEnvelopeFrom());
-        properties.put("mail.smtp.connectiontimeout",
-                connectionParams.getConnectTimeout());
-        properties
-                .put("mail.smtp.timeout", connectionParams.getSocketTimeout());
+        properties.setProperty("mail.smtp.auth",
+                "" + connectionParams.isNeedAuth());
+        properties.setProperty("mail.from", connectionParams.getEnvelopeFrom());
+        properties.setProperty("mail.smtp.connectiontimeout", ""
+                + connectionParams.getConnectTimeout());
+        properties.setProperty("mail.smtp.timeout",
+                "" + connectionParams.getSocketTimeout());
 
         session = Session.getInstance(properties, getAuthenticator());
         session.setDebug(connectionParams.isDebug());
@@ -72,6 +73,7 @@ public final class Connection {
             transport = session.getTransport(urlName);
             transport.connect();
         } catch (MessagingException e) {
+            close();
             throw new ConnectionException(e);
         }
     }
@@ -89,7 +91,7 @@ public final class Connection {
                 transport.close();
             }
         } catch (MessagingException e) {
-            e.printStackTrace();
+
         } finally {
             transport = null;
             session = null;
