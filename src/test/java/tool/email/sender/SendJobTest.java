@@ -54,7 +54,7 @@ public class SendJobTest {
         job.setSubject("<script>alert(\"subject\");</script>");
         job.addMailTo(new InternetAddress(mailto));
         boolean success = job.send();
-        assertTrue(success);
+        assertTrue(!success);
     }
 
 }
