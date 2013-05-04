@@ -46,23 +46,25 @@ public final class Connection {
     public void connect() throws ConnectionException {
         close();
         Properties properties = new Properties();
-        properties.setProperty("mail.smtp.host", connectionParams.getHost());
+        String protocol = connectionParams.getProtocol();
+        properties.setProperty("mail." + protocol + ".host",
+                connectionParams.getHost());
         if (null != connectionParams.getHeloName()) {
             try {
-                properties.setProperty("mail.smtp.localhost",
+                properties.setProperty("mail." + protocol + ".localhost",
                         MimeUtility.encodeWord(connectionParams.getHeloName()));
             } catch (UnsupportedEncodingException e) {
-                properties.setProperty("mail.smtp.localhost",
+                properties.setProperty("mail." + protocol + ".localhost",
                         connectionParams.getHeloName());
             }
         }
-        properties.setProperty("mail.smtp.auth",
-                "" + connectionParams.isNeedAuth());
+        properties.setProperty("mail." + protocol + ".auth", ""
+                + connectionParams.isNeedAuth());
         properties.setProperty("mail.from", connectionParams.getEnvelopeFrom());
-        properties.setProperty("mail.smtp.connectiontimeout", ""
+        properties.setProperty("mail." + protocol + ".connectiontimeout", ""
                 + connectionParams.getConnectTimeout());
-        properties.setProperty("mail.smtp.timeout",
-                "" + connectionParams.getSocketTimeout());
+        properties.setProperty("mail." + protocol + ".timeout", ""
+                + connectionParams.getSocketTimeout());
 
         session = Session.getInstance(properties, getAuthenticator());
         session.setDebug(connectionParams.isDebug());
