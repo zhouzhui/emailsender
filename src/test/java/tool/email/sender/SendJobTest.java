@@ -2,59 +2,49 @@ package tool.email.sender;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author dhf
  */
 public class SendJobTest {
-    private String username = "";
-
-    private String password = "";
-
-    private String smtpHost = "";
-
-    private int smtpPort = 25;
-
-    private String heloName = "";
-
-    private String mailto = "";
-
-    @Before
-    public void init() {
-        this.username = "fakeuser@example.com";
-        this.password = "fakepassword";
-        this.smtpHost = "fakesmtp.example.com";
-        this.smtpPort = 25;
-        this.heloName = "faker";
-        this.mailto = "fakereceiver@excample.com";
-    }
-
     @Test
-    public void testSend() throws AddressException {
-        SendJob job = new SendJob();
+    public void testSend() throws AddressException,
+            UnsupportedEncodingException {
+        String username = "fake@example.com";
+        String password = "fakepwd";
+        String protocol = "smtps"; // default: smtp
+        String smtpHost = "smtp.example.com";
+        int smtpPort = 465; // default: 25
+        long timeoutInMills = 1000L; // default: 5000L
 
-        Connection conn = new Connection();
-        ConnectionParams params = new ConnectionParams();
-        params.setConnectTimeout(1000L).setDebug(true).setDebugOut(System.out)
-                .setEnvelopeFrom(username).setHeloName(heloName)
-                .setHost(smtpHost).setKeepAlive(false).setNeedAuth(true)
-                .setPassword(password).setPort(smtpPort).setProtocol("smtp")
-                .setSocketTimeout(1000L);
-        conn.setConnectionParams(params);
-        job.setConnection(conn);
-        job.setContentEncoding("utf-8");
-        job.setHtmlContent(false);
-        job.setMailContent("<script>alert(\"content\");</script>");
-        job.setMailFrom(new InternetAddress("admin@heroyang.com"));
-        job.setSubject("<script>alert(\"subject\");</script>");
-        job.addMailTo(new InternetAddress(mailto));
+        ConnectionParams connectionParams = new ConnectionParams();
+        connectionParams.setConnectTimeout(timeoutInMills)
+                .setSocketTimeout(timeoutInMills).setDebug(true)
+                .setProtocol(protocol).setHost(smtpHost).setPort(smtpPort)
+                .setNeedAuth(true).setEnvelopeFrom(username)
+                .setPassword(password);
+
+        String subject = "emailsender v1.1 changelog";
+        // default: envelopeFrom
+        InternetAddress mailfrom = new InternetAddress(
+                "fakemailfrom@example.com", "Fake MailFrom");
+        InternetAddress mailto = new InternetAddress(
+                "fakerecipient@example.com");
+        String content = "1. Fluent API for SendJob & Attachment; \n"
+                + "2. No default constructor for Connection & SendJob now";
+        boolean htmlContent = false;
+
+        SendJob job = new SendJob(new Connection(connectionParams));
+        job.setSubject(subject).setMailFrom(mailfrom).addMailTo(mailto)
+                .setMailContent(content).setHtmlContent(htmlContent);
+
         boolean success = job.send();
         assertTrue(!success);
     }
-
 }

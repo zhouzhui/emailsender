@@ -20,7 +20,10 @@ public final class Connection {
 
     private ConnectionParams connectionParams;
 
-    public void setConnectionParams(ConnectionParams connectionParams) {
+    public Connection(ConnectionParams connectionParams) {
+        if (null == connectionParams) {
+            throw new IllegalArgumentException("connectionParams is null");
+        }
         this.connectionParams = connectionParams;
     }
 
@@ -44,12 +47,14 @@ public final class Connection {
         close();
         Properties properties = new Properties();
         properties.setProperty("mail.smtp.host", connectionParams.getHost());
-        try {
-            properties.setProperty("mail.smtp.localhost",
-                    MimeUtility.encodeWord(connectionParams.getHeloName()));
-        } catch (UnsupportedEncodingException e) {
-            properties.setProperty("mail.smtp.localhost",
-                    connectionParams.getHeloName());
+        if (null != connectionParams.getHeloName()) {
+            try {
+                properties.setProperty("mail.smtp.localhost",
+                        MimeUtility.encodeWord(connectionParams.getHeloName()));
+            } catch (UnsupportedEncodingException e) {
+                properties.setProperty("mail.smtp.localhost",
+                        connectionParams.getHeloName());
+            }
         }
         properties.setProperty("mail.smtp.auth",
                 "" + connectionParams.isNeedAuth());

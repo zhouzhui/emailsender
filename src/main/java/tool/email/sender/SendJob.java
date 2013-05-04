@@ -67,6 +67,13 @@ public final class SendJob implements Runnable {
 
     private Connection connection = null;
 
+    public SendJob(Connection connection) {
+        if (null == connection) {
+            throw new IllegalArgumentException("connection is null");
+        }
+        this.connection = connection;
+    }
+
     @Override
     public void run() {
         send();
@@ -178,14 +185,6 @@ public final class SendJob implements Runnable {
                 }
             }
         }
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public InternetAddress getMailFrom() {

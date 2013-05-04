@@ -8,8 +8,11 @@ import org.apache.commons.pool.PoolableObjectFactory;
 public class ConnectionFactory implements PoolableObjectFactory<Connection> {
     private ConnectionParams connectionParams;
 
-    public ConnectionFactory(ConnectionParams params) {
-        this.connectionParams = params;
+    public ConnectionFactory(ConnectionParams connectionParams) {
+        if (null == connectionParams) {
+            throw new IllegalArgumentException("connectionParams is null");
+        }
+        this.connectionParams = connectionParams;
     }
 
     @Override
@@ -25,15 +28,14 @@ public class ConnectionFactory implements PoolableObjectFactory<Connection> {
 
     @Override
     public Connection makeObject() throws Exception {
-        Connection conn = new Connection();
-        conn.setConnectionParams(connectionParams);
+        Connection conn = new Connection(connectionParams);
         conn.connect();
         return conn;
     }
 
     @Override
     public boolean validateObject(Connection conn) {
-        return true;
+        return conn.isConnected();
     }
 
 }
