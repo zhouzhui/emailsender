@@ -1,11 +1,17 @@
 package tool.email.sender;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * @author dhf
  */
-public class Attachment {
+public class Attachment implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8504839753973747724L;
+
     private String name;
 
     private File file;
@@ -16,24 +22,27 @@ public class Attachment {
         return name;
     }
 
-    public void setName(String name) {
+    public Attachment setName(String name) {
         this.name = name;
+        return this;
     }
 
     public File getFile() {
         return file;
     }
 
-    public void setFile(File file) {
+    public Attachment setFile(File file) {
         this.file = file;
+        return this;
     }
 
     public boolean isInline() {
         return inline;
     }
 
-    public void setInline(boolean inline) {
+    public Attachment setInline(boolean inline) {
         this.inline = inline;
+        return this;
     }
 
 }

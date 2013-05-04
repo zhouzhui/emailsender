@@ -192,16 +192,18 @@ public final class SendJob implements Runnable {
         return from;
     }
 
-    public void setMailFrom(InternetAddress from) {
+    public SendJob setMailFrom(InternetAddress from) {
         this.from = from;
+        return this;
     }
 
     public Collection<InternetAddress> getMailTo() {
         return to;
     }
 
-    public void addMailTo(InternetAddress addr) {
+    public SendJob addMailTo(InternetAddress addr) {
         to.add(addr);
+        return this;
     }
 
     public void clearMailTo() {
@@ -212,8 +214,9 @@ public final class SendJob implements Runnable {
         return cc;
     }
 
-    public void addMailCc(InternetAddress addr) {
+    public SendJob addMailCc(InternetAddress addr) {
         cc.add(addr);
+        return this;
     }
 
     public void clearMailCc() {
@@ -224,8 +227,9 @@ public final class SendJob implements Runnable {
         return bcc;
     }
 
-    public void addMailBcc(InternetAddress addr) {
+    public SendJob addMailBcc(InternetAddress addr) {
         bcc.add(addr);
+        return this;
     }
 
     public void clearMailBcc() {
@@ -236,8 +240,9 @@ public final class SendJob implements Runnable {
         return realRecipients;
     }
 
-    public void addRealRecipient(InternetAddress addr) {
+    public SendJob addRealRecipient(InternetAddress addr) {
         realRecipients.add(addr);
+        return this;
     }
 
     public void clearRealRecipient() {
@@ -258,7 +263,16 @@ public final class SendJob implements Runnable {
         bcc.clear();
     }
 
-    public void addAttachment(String name, String filePath, boolean inline)
+    public SendJob addAttachment(String filePath) throws FileNotFoundException {
+        return addAttachment(null, filePath);
+    }
+
+    public SendJob addAttachment(String name, String filePath)
+            throws FileNotFoundException {
+        return addAttachment(name, filePath, false);
+    }
+
+    public SendJob addAttachment(String name, String filePath, boolean inline)
             throws FileNotFoundException {
         File f = new File(filePath);
         if (!f.exists()) {
@@ -266,25 +280,15 @@ public final class SendJob implements Runnable {
                     + "] not found");
         }
         Attachment attachment = new Attachment();
-        attachment.setFile(f);
-        attachment.setName(name);
-        attachment.setInline(inline);
-        attachments.add(attachment);
+        attachment.setFile(f).setName(name).setInline(inline);
+        return addAttachment(attachment);
     }
 
-    public void addAttachment(String name, String filePath)
-            throws FileNotFoundException {
-        addAttachment(name, filePath, false);
-    }
-
-    public void addAttachment(String filePath) throws FileNotFoundException {
-        addAttachment(null, filePath);
-    }
-
-    public void addAttachment(Attachment attachment) {
+    public SendJob addAttachment(Attachment attachment) {
         if (null != attachment) {
             attachments.add(attachment);
         }
+        return this;
     }
 
     public void clearAttachments() {
@@ -296,56 +300,111 @@ public final class SendJob implements Runnable {
 
     }
 
-    public void setAttachmentEncoding(String attachmentEncoding) {
+    public SendJob setAttachmentEncoding(String attachmentEncoding) {
         this.attachmentEncoding = attachmentEncoding;
+        return this;
     }
 
     public Collection<Header> getHeaders() {
         return headers;
     }
 
-    public void addHeader(String name, String value) {
+    public SendJob addHeader(String name, String value) {
         headers.add(new Header(name, value));
+        return this;
     }
 
     public String getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public SendJob setSubject(String subject) {
         this.subject = subject;
+        return this;
     }
 
     public String getSubjectEncoding() {
         return subjectEncoding;
     }
 
-    public void setSubjectEncoding(String subjectEncoding) {
+    public SendJob setSubjectEncoding(String subjectEncoding) {
         this.subjectEncoding = subjectEncoding;
+        return this;
     }
 
     public String getMailContent() {
         return content;
     }
 
-    public void setMailContent(String content) {
+    public SendJob setMailContent(String content) {
         this.content = content;
+        return this;
     }
 
     public String getContentEncoding() {
         return contentEncoding;
     }
 
-    public void setContentEncoding(String contentEncoding) {
+    public SendJob setContentEncoding(String contentEncoding) {
         this.contentEncoding = contentEncoding;
+        return this;
     }
 
     public boolean isHtmlContent() {
         return htmlContent;
     }
 
-    public void setHtmlContent(boolean htmlContent) {
+    public SendJob setHtmlContent(boolean htmlContent) {
         this.htmlContent = htmlContent;
+        return this;
+    }
+
+    public boolean isSendPartial() {
+        return sendPartial;
+    }
+
+    public SendJob setSendPartial(boolean sendPartial) {
+        this.sendPartial = sendPartial;
+        return this;
+    }
+
+    public Collection<TransportListener> getTransportListeners() {
+        return transportListeners;
+    }
+
+    public SendJob addTransportListener(TransportListener l) {
+        if (null != l) {
+            transportListeners.add(l);
+        }
+        return this;
+    }
+
+    public void clearTransportListeners() {
+        transportListeners.clear();
+    }
+
+    public Collection<ConnectionListener> getConnectionListeners() {
+        return connectionListeners;
+    }
+
+    public SendJob addConnectionListener(ConnectionListener l) {
+        if (null != l) {
+            connectionListeners.add(l);
+        }
+        return this;
+    }
+
+    public void clearConnectionListeners() {
+        connectionListeners.clear();
+    }
+
+    public SendJob setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public boolean isSuccess() {
@@ -363,49 +422,4 @@ public final class SendJob implements Runnable {
     void setException(Throwable exception) {
         this.exception = exception;
     }
-
-    public boolean isSendPartial() {
-        return sendPartial;
-    }
-
-    public void setSendPartial(boolean sendPartial) {
-        this.sendPartial = sendPartial;
-    }
-
-    public Collection<TransportListener> getTransportListeners() {
-        return transportListeners;
-    }
-
-    public void addTransportListener(TransportListener l) {
-        if (null != l) {
-            transportListeners.add(l);
-        }
-    }
-
-    public void clearTransportListeners() {
-        transportListeners.clear();
-    }
-
-    public Collection<ConnectionListener> getConnectionListeners() {
-        return connectionListeners;
-    }
-
-    public void addConnectionListener(ConnectionListener l) {
-        if (null != l) {
-            connectionListeners.add(l);
-        }
-    }
-
-    public void clearConnectionListeners() {
-        connectionListeners.clear();
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
 }
