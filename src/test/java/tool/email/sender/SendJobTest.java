@@ -40,11 +40,11 @@ public class SendJobTest {
 
         Connection conn = new Connection();
         ConnectionParams params = new ConnectionParams();
-        params.setConnectTimeout(1).setDebug(true).setDebugOut(System.out)
+        params.setConnectTimeout(1000L).setDebug(true).setDebugOut(System.out)
                 .setEnvelopeFrom(username).setHeloName(heloName)
                 .setHost(smtpHost).setKeepAlive(false).setNeedAuth(true)
                 .setPassword(password).setPort(smtpPort).setProtocol("smtp")
-                .setSocketTimeout(1);
+                .setSocketTimeout(1000L);
         conn.setConnectionParams(params);
         job.setConnection(conn);
         job.setContentEncoding("utf-8");
