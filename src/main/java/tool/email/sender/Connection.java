@@ -65,6 +65,8 @@ public final class Connection {
                 + connectionParams.getConnectTimeout());
         properties.setProperty("mail." + protocol + ".timeout", ""
                 + connectionParams.getSocketTimeout());
+        properties.setProperty("mail.debug.auth",
+                "" + connectionParams.isDebugAuth());
 
         session = Session.getInstance(properties, getAuthenticator());
         session.setDebug(connectionParams.isDebug());

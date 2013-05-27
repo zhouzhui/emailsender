@@ -22,6 +22,8 @@ public class ConnectionParams {
 
     private boolean debug = false;
 
+    private boolean debugAuth = false;
+
     private long connectTimeout = 5000;
 
     private long socketTimeout = 5000;
@@ -99,6 +101,21 @@ public class ConnectionParams {
 
     public ConnectionParams setDebug(boolean debug) {
         this.debug = debug;
+        return this;
+    }
+
+    public boolean isDebugAuth() {
+        return debugAuth;
+    }
+
+    /**
+     * since javamail 1.4.5, auth info in debug output is suppressed by default
+     * 
+     * @param debugAuth
+     * @return
+     */
+    public ConnectionParams setDebugAuth(boolean debugAuth) {
+        this.debugAuth = debugAuth;
         return this;
     }
 
