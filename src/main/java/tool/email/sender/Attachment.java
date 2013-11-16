@@ -1,6 +1,5 @@
 package tool.email.sender;
 
-import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -14,7 +13,7 @@ public class Attachment implements Serializable {
 
     private String name;
 
-    private File file;
+    private byte[] bytes;
 
     private boolean inline;
 
@@ -27,12 +26,12 @@ public class Attachment implements Serializable {
         return this;
     }
 
-    public File getFile() {
-        return file;
+    public byte[] getBytes() {
+        return bytes;
     }
 
-    public Attachment setFile(File file) {
-        this.file = file;
+    public Attachment setBytes(byte[] bytes) {
+        this.bytes = bytes;
         return this;
     }
 

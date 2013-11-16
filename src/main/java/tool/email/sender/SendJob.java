@@ -1,13 +1,11 @@
 package tool.email.sender;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Header;
@@ -20,6 +18,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
+import javax.mail.util.ByteArrayDataSource;
 
 import com.sun.mail.smtp.SMTPMessage;
 
@@ -111,29 +110,32 @@ public final class SendJob implements Runnable {
                     Multipart multipart = new MimeMultipart();
 
                     BodyPart mdpContent = new MimeBodyPart();
-                    mdpContent.setContent(this.content,
-                            (htmlContent ? "text/html;" : "text/plain;")
-                                    + "charset=" + this.contentEncoding);
+                    String mimeType = (htmlContent ? "text/html" : "text/plain");
+
+                    mdpContent.setContent(this.content, mimeType + ";"
+                            + "charset=" + this.contentEncoding);
                     multipart.addBodyPart(mdpContent);
 
                     for (Attachment attachment: attachments) {
-                        if (null != attachment.getFile()) {
+                        if (null != attachment.getBytes()
+                                && attachment.getBytes().length > 0) {
                             BodyPart mdp = new MimeBodyPart();
-                            FileDataSource fds = new FileDataSource(
-                                    attachment.getFile());
-                            DataHandler dh = new DataHandler(fds);
+                            ByteArrayDataSource ds = new ByteArrayDataSource(
+                                    attachment.getBytes(), mimeType + ";"
+                                            + "charset=" + attachmentEncoding);
+                            DataHandler dh = new DataHandler(ds);
                             mdp.setDataHandler(dh);
                             String fileName = attachment.getName();
                             if (null == fileName) {
-                                fileName = attachment.getFile().getName();
+                                fileName = attachment.toString();
                             }
                             mdp.setFileName(MimeUtility.encodeText(fileName,
                                     attachmentEncoding, "B"));
 
                             if (attachment.isInline()) {
                                 mdp.setDisposition(BodyPart.INLINE);
-                                mdp.setHeader("Content-ID",
-                                        "<" + attachment.getName() + ">");
+                                mdp.setHeader("Content-ID", "<" + fileName
+                                        + ">");
                             }
                             multipart.addBodyPart(mdp);
                         }
@@ -262,25 +264,16 @@ public final class SendJob implements Runnable {
         bcc.clear();
     }
 
-    public SendJob addAttachment(String filePath) throws FileNotFoundException {
-        return addAttachment(null, filePath);
+    public SendJob addAttachment(String name, byte[] attachment)
+            throws FileNotFoundException {
+        return addAttachment(name, attachment, false);
     }
 
-    public SendJob addAttachment(String name, String filePath)
+    public SendJob addAttachment(String name, byte[] attachment, boolean inline)
             throws FileNotFoundException {
-        return addAttachment(name, filePath, false);
-    }
-
-    public SendJob addAttachment(String name, String filePath, boolean inline)
-            throws FileNotFoundException {
-        File f = new File(filePath);
-        if (!f.exists()) {
-            throw new FileNotFoundException("Attachment file [" + filePath
-                    + "] not found");
-        }
-        Attachment attachment = new Attachment();
-        attachment.setFile(f).setName(name).setInline(inline);
-        return addAttachment(attachment);
+        Attachment a = new Attachment();
+        a.setBytes(attachment).setName(name).setInline(inline);
+        return addAttachment(a);
     }
 
     public SendJob addAttachment(Attachment attachment) {

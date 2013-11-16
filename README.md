@@ -3,6 +3,22 @@ emailsender
 
 A client for sending email with simple java api
 
+# Change log
+## v1.1.1
+1. modify Attachment api, remove File API dependency
+
+## v1.1.0
+1. Fluent API for SendJob & Attachment
+2. No default constructor for Connection & SendJob now
+
+## v1.0.0
+1. First version
+
+# Build
+    git clone https://github.com/hfdiao/emailsender.git
+    cd emailsender
+    mvn package -Dmaven.test.skip=true
+
 # Dependency
 *    javamail 1.4.5+, required
 *    commons-pool 1.6, optional
