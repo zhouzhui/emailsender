@@ -6,7 +6,7 @@
 	<groupId>github.hfdiao</groupId>
 	<artifactId>emailsender</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 	<name>email sender</name>
 	<description>A client for sending email with javamail api</description>
 	<url>https://github.com/hfdiao/emailsender</url>
